@@ -10,8 +10,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import * as React from 'react';
 
 export default function LoginPage() {
-  const [role, setRole] = React.useState('admin');
-  const [email, setEmail] = React.useState('');
+  const [role, setRole] = React.useState('staff');
+  const [email, setEmail] = React.useState('admin@ecoclade.ca');
   const [staffId, setStaffId] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -35,18 +35,18 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div className="space-y-2">
                 <Label>Role</Label>
-                <RadioGroup defaultValue="admin" onValueChange={handleRoleChange} className="flex gap-4">
+                <RadioGroup defaultValue="staff" onValueChange={handleRoleChange} className="flex gap-4">
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="admin" id="admin" />
-                        <Label htmlFor="admin">Admin</Label>
+                        <RadioGroupItem value="staff" id="staff" />
+                        <Label htmlFor="staff">Staff</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="manager" id="manager" />
                         <Label htmlFor="manager">Manager</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="staff" id="staff" />
-                        <Label htmlFor="staff">Staff</Label>
+                        <RadioGroupItem value="admin" id="admin" />
+                        <Label htmlFor="admin">Admin</Label>
                     </div>
                 </RadioGroup>
             </div>
