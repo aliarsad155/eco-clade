@@ -11,12 +11,12 @@ export function Logo({ className }: { className?: string }) {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="h-6 w-6 text-primary"
+        className="h-8 w-8 text-primary"
       >
         <path d="M12 22c-2 0-4-1-5-2-1-2-2-4-2-6 0-2 1-4 2-5 2-2 4-3 6-3s4 1 6 3c1 1 2 3 2 5 0 2-1 4-2 6-1 1-3 2-5 2Z" />
         <path d="M12 2a7 7 0 0 0-7 7c0 2 1 4 2 5" />
       </svg>
-      <span className="text-lg font-semibold tracking-tighter">EcoClade</span>
+      <span className="text-2xl font-bold tracking-tighter">EcoClade</span>
     </div>
   );
 }
