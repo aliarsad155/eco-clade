@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -11,18 +12,13 @@ import * as React from 'react';
 
 export default function LoginPage() {
   const [role, setRole] = React.useState('staff');
-  const [email, setEmail] = React.useState('admin@ecoclade.ca');
-  const [staffId, setStaffId] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const handleRoleChange = (value: string) => {
     setRole(value);
-    if (value === 'admin') {
-      setPassword('Admin125');
-      setStaffId('');
-    } else {
-      setPassword('');
-    }
+    setEmail('');
+    setPassword('');
   };
 
   const dashboardUrl = role === 'admin' ? '/dashboard' : `/dashboard?role=${role}`;
@@ -41,7 +37,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div className="space-y-2">
                 <Label>Role</Label>
-                <RadioGroup defaultValue="staff" onValueChange={handleRoleChange} className="flex gap-4">
+                <RadioGroup value={role} onValueChange={handleRoleChange} className="flex gap-4">
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="staff" id="staff" />
                         <Label htmlFor="staff">Staff</Label>
@@ -53,17 +49,10 @@ export default function LoginPage() {
                 </RadioGroup>
             </div>
 
-            {role === 'admin' ? (
-                 <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="admin@ecoclade.ca" required value={email} onChange={e => setEmail(e.target.value)} />
-                </div>
-            ) : (
-                <div className="space-y-2">
-                    <Label htmlFor="staffId">Staff ID</Label>
-                    <Input id="staffId" type="text" placeholder="Enter your ID" required value={staffId} onChange={e => setStaffId(e.target.value)}/>
-                </div>
-            )}
+            <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="Enter your email" required value={email} onChange={e => setEmail(e.target.value)} />
+            </div>
            
             <div className="space-y-2">
               <div className="flex items-center">
