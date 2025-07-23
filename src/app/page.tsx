@@ -6,8 +6,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/logo';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import * as React from 'react';
 
 export default function LoginPage() {
+  const [role, setRole] = React.useState('admin');
+  const [email, setEmail] = React.useState('');
+  const [staffId, setStaffId] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleRoleChange = (value: string) => {
+    setRole(value);
+  };
+
+  const dashboardUrl = role === 'admin' ? '/dashboard' : `/dashboard?role=${role}`;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md shadow-2xl">
@@ -21,9 +34,35 @@ export default function LoginPage() {
         <CardContent>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="staff@ecoclade.ca" required />
+                <Label>Role</Label>
+                <RadioGroup defaultValue="admin" onValueChange={handleRoleChange} className="flex gap-4">
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="admin" id="admin" />
+                        <Label htmlFor="admin">Admin</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="manager" id="manager" />
+                        <Label htmlFor="manager">Manager</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="staff" id="staff" />
+                        <Label htmlFor="staff">Staff</Label>
+                    </div>
+                </RadioGroup>
             </div>
+
+            {role === 'admin' ? (
+                 <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" placeholder="admin@ecoclade.ca" required value={email} onChange={e => setEmail(e.target.value)} />
+                </div>
+            ) : (
+                <div className="space-y-2">
+                    <Label htmlFor="staffId">Staff/Manager ID</Label>
+                    <Input id="staffId" type="text" placeholder="Enter your ID" required value={staffId} onChange={e => setStaffId(e.target.value)}/>
+                </div>
+            )}
+           
             <div className="space-y-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
@@ -31,9 +70,9 @@ export default function LoginPage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
             </div>
-            <Link href="/dashboard" className="w-full">
+            <Link href={dashboardUrl} className="w-full">
               <Button type="submit" className="w-full">
                 Sign In
               </Button>
