@@ -44,7 +44,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const initialTasks = [
-    { id: 1, name: 'Finalize foundation blueprints', assignee: 'Michael J.', due: '2024-08-01', priority: 'High' as const, status: 'In Progress' as const },
+    { id: 1, name: 'Finalize foundation blueprints', assignee: 'Michael J.', due: '2024-08-01', priority: 'High' as const, status: 'To Do' as const },
     { id: 2, name: 'Conduct weekly safety inspection', assignee: 'Emily D.', due: '2024-07-29', priority: 'High' as const, status: 'To Do' as const },
     { id: 3, name: 'Order steel beams for Phase 2', assignee: 'John D.', due: '2024-08-05', priority: 'Medium' as const, status: 'To Do' as const },
     { id: 4, name: 'Client progress meeting', assignee: 'Jane S.', due: '2024-07-30', priority: 'Medium' as const, status: 'In Progress' as const },
@@ -230,3 +230,5 @@ export default function TasksPage() {
         </Tabs>
     );
 }
+
+    
