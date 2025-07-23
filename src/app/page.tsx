@@ -17,6 +17,12 @@ export default function LoginPage() {
 
   const handleRoleChange = (value: string) => {
     setRole(value);
+    if (value === 'admin') {
+      setPassword('Admin125');
+      setStaffId('');
+    } else {
+      setPassword('');
+    }
   };
 
   const dashboardUrl = role === 'admin' ? '/dashboard' : `/dashboard?role=${role}`;
@@ -41,10 +47,6 @@ export default function LoginPage() {
                         <Label htmlFor="staff">Staff</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="manager" id="manager" />
-                        <Label htmlFor="manager">Manager</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
                         <RadioGroupItem value="admin" id="admin" />
                         <Label htmlFor="admin">Admin</Label>
                     </div>
@@ -58,7 +60,7 @@ export default function LoginPage() {
                 </div>
             ) : (
                 <div className="space-y-2">
-                    <Label htmlFor="staffId">Staff/Manager ID</Label>
+                    <Label htmlFor="staffId">Staff ID</Label>
                     <Input id="staffId" type="text" placeholder="Enter your ID" required value={staffId} onChange={e => setStaffId(e.target.value)}/>
                 </div>
             )}
