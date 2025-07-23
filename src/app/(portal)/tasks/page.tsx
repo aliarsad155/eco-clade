@@ -34,16 +34,14 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
 
 const initialTasks = [
     { id: 1, name: 'Finalize foundation blueprints', assignee: 'Michael J.', due: '2024-08-01', priority: 'High' as const, status: 'In Progress' as const },
