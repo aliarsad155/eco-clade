@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -28,8 +29,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 
-const staffData = [
+const initialStaffData = [
   {
     name: 'John Doe',
     email: 'john.doe@ecoclade.ca',
@@ -79,12 +90,39 @@ const staffData = [
 
 export default function StaffPage() {
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [staffData, setStaffData] = React.useState(initialStaffData);
+  const [open, setOpen] = React.useState(false);
+  const [newName, setNewName] = React.useState('');
+  const [newEmail, setNewEmail] = React.useState('');
+  const [newRole, setNewRole] = React.useState('');
+  const [newPhone, setNewPhone] = React.useState('');
+
   const filteredStaff = staffData.filter(
     (staff) =>
       staff.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       staff.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       staff.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleAddStaff = () => {
+    if (newName && newEmail && newRole) {
+      const newStaffMember = {
+        name: newName,
+        email: newEmail,
+        role: newRole,
+        phone: newPhone,
+        avatar: 'https://placehold.co/100x100',
+        avatarFallback: newName.split(' ').map(n => n[0]).join(''),
+        dataAiHint: 'person face',
+      };
+      setStaffData([newStaffMember, ...staffData]);
+      setNewName('');
+      setNewEmail('');
+      setNewRole('');
+      setNewPhone('');
+      setOpen(false);
+    }
+  };
 
   return (
     <Card>
@@ -106,9 +144,39 @@ export default function StaffPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Staff
-            </Button>
+             <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <PlusCircle className="mr-2 h-4 w-4" /> Add Staff
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Add New Staff Member</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">Name</Label>
+                    <Input id="name" value={newName} onChange={(e) => setNewName(e.target.value)} className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="email" className="text-right">Email</Label>
+                    <Input id="email" type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="role" className="text-right">Role</Label>
+                    <Input id="role" value={newRole} onChange={(e) => setNewRole(e.target.value)} className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="phone" className="text-right">Phone</Label>
+                    <Input id="phone" type="tel" value={newPhone} onChange={(e) => setNewPhone(e.target.value)} className="col-span-3" />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit" onClick={handleAddStaff}>Add Staff</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </CardHeader>

@@ -1,5 +1,7 @@
+
 'use client';
 
+import * as React from 'react';
 import { PlusCircle } from 'lucide-react';
 import {
   Avatar,
@@ -29,8 +31,21 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const tasks = [
+
+const initialTasks = [
     { id: 1, name: 'Finalize foundation blueprints', assignee: 'Michael J.', due: '2024-08-01', priority: 'High', status: 'In Progress' },
     { id: 2, name: 'Conduct weekly safety inspection', assignee: 'Emily D.', due: '2024-07-29', priority: 'High', status: 'To Do' },
     { id: 3, name: 'Order steel beams for Phase 2', assignee: 'John D.', due: '2024-08-05', priority: 'Medium', status: 'To Do' },
@@ -52,6 +67,32 @@ const statusVariant = {
 };
 
 export default function TasksPage() {
+    const [tasks, setTasks] = React.useState(initialTasks);
+    const [open, setOpen] = React.useState(false);
+    const [newTaskName, setNewTaskName] = React.useState('');
+    const [newAssignee, setNewAssignee] = React.useState('');
+    const [newDueDate, setNewDueDate] = React.useState('');
+    const [newPriority, setNewPriority] = React.useState('Medium');
+
+    const handleAddTask = () => {
+        if (newTaskName && newAssignee && newDueDate) {
+            const newTask = {
+                id: tasks.length + 1,
+                name: newTaskName,
+                assignee: newAssignee,
+                due: newDueDate,
+                priority: newPriority,
+                status: 'To Do',
+            };
+            setTasks([newTask, ...tasks]);
+            setNewTaskName('');
+            setNewAssignee('');
+            setNewDueDate('');
+            setNewPriority('Medium');
+            setOpen(false);
+        }
+    };
+
   return (
     <Tabs defaultValue="all">
       <div className="flex items-center">
@@ -61,12 +102,51 @@ export default function TasksPage() {
           <TabsTrigger value="completed">Completed</TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          <Button size="sm" className="h-8 gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              New Task
-            </span>
-          </Button>
+           <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="h-8 gap-1">
+                    <PlusCircle className="h-3.5 w-3.5" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    New Task
+                    </span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create New Task</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid items-center gap-1.5">
+                    <Label htmlFor="taskName">Task Name</Label>
+                    <Input id="taskName" value={newTaskName} onChange={e => setNewTaskName(e.target.value)} />
+                  </div>
+                  <div className="grid items-center gap-1.5">
+                    <Label htmlFor="assignee">Assignee</Label>
+                    <Input id="assignee" value={newAssignee} onChange={e => setNewAssignee(e.target.value)} />
+                  </div>
+                  <div className="grid items-center gap-1.5">
+                    <Label htmlFor="dueDate">Due Date</Label>
+                    <Input id="dueDate" type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} />
+                  </div>
+                  <div className="grid items-center gap-1.5">
+                    <Label>Priority</Label>
+                    <Select value={newPriority} onValueChange={setNewPriority}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="High">High</SelectItem>
+                        <SelectItem value="Medium">Medium</SelectItem>
+                        <SelectItem value="Low">Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleAddTask}>Add Task</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
         </div>
       </div>
       <TabsContent value="all">
@@ -89,7 +169,7 @@ export default function TasksPage() {
             <CardDescription>
               Tasks assigned directly to you.
             </CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent>
             <TaskTable tasks={tasks.filter(t => ['John D.', 'Jane S.', 'Emily D.'].includes(t.assignee))} />
           </CardContent>
@@ -102,7 +182,7 @@ export default function TasksPage() {
             <CardDescription>
               Recently completed tasks.
             </CardDescription>
-          </CardHeader>
+          </Header>
           <CardContent>
             <TaskTable tasks={tasks.filter(t => t.status === 'Completed')} />
           </CardContent>
@@ -112,7 +192,7 @@ export default function TasksPage() {
   );
 }
 
-function TaskTable({ tasks }: { tasks: typeof import('./page').tasks }) {
+function TaskTable({ tasks }: { tasks: typeof initialTasks }) {
     return (
         <Table>
             <TableHeader>

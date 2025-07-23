@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -24,7 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
-const announcements = [
+const initialAnnouncements = [
   {
     title: 'Q3 Safety Protocols Update',
     date: 'July 22, 2024',
@@ -47,6 +48,24 @@ const announcements = [
 
 export default function AnnouncementsPage() {
     const [open, setOpen] = React.useState(false);
+    const [announcements, setAnnouncements] = React.useState(initialAnnouncements);
+    const [newTitle, setNewTitle] = React.useState('');
+    const [newMessage, setNewMessage] = React.useState('');
+
+    const handlePostAnnouncement = () => {
+        if (newTitle && newMessage) {
+            const newAnnouncement = {
+                title: newTitle,
+                content: newMessage,
+                author: 'Admin',
+                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            };
+            setAnnouncements([newAnnouncement, ...announcements]);
+            setNewTitle('');
+            setNewMessage('');
+            setOpen(false);
+        }
+    };
 
   return (
     <div className="space-y-4">
@@ -71,15 +90,15 @@ export default function AnnouncementsPage() {
                     <div className="grid gap-4 py-4">
                         <div className="space-y-2">
                             <Label htmlFor="title">Title</Label>
-                            <Input id="title" placeholder="Announcement Title" />
+                            <Input id="title" placeholder="Announcement Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="message">Message</Label>
-                            <Textarea id="message" placeholder="Type your announcement here." rows={5} />
+                            <Textarea id="message" placeholder="Type your announcement here." rows={5} value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button type="submit" onClick={() => setOpen(false)}>Post Announcement</Button>
+                        <Button type="submit" onClick={handlePostAnnouncement}>Post Announcement</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

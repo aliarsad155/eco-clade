@@ -1,3 +1,4 @@
+
 'use client';
 import * as React from 'react';
 import { PlusCircle, Search, File, Loader2 } from 'lucide-react';
@@ -30,7 +31,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 
-const documents = [
+const initialDocuments = [
   { name: 'Structural Blueprints Q2.pdf', type: 'PDF', uploadedBy: 'John Doe', date: '2023-05-15' },
   { name: 'Safety Protocols v3.docx', type: 'Word', uploadedBy: 'Jane Smith', date: '2023-05-12' },
   { name: 'Site Inspection Photos.zip', type: 'ZIP', uploadedBy: 'Michael Johnson', date: '2023-05-10' },
@@ -42,14 +43,34 @@ export default function DocumentsPage() {
     const [open, setOpen] = React.useState(false);
     const [isGenerating, setIsGenerating] = React.useState(false);
     const [title, setTitle] = React.useState('');
+    const [documents, setDocuments] = React.useState(initialDocuments);
+    const [file, setFile] = React.useState<File | null>(null);
 
     const handleGenerateTitle = () => {
         setIsGenerating(true);
         setTimeout(() => {
-            setTitle("AI Generated - Site Logistics Plan_2024-07-26.pdf");
+            const fileName = file ? file.name : 'Generated_Document.pdf';
+            const aiTitle = `AI Suggested - ${fileName.split('.')[0]}_${new Date().toISOString().split('T')[0]}.${fileName.split('.').pop()}`;
+            setTitle(aiTitle);
             setIsGenerating(false);
         }, 1500);
     };
+    
+    const handleUpload = () => {
+        if (title && file) {
+            const newDocument = {
+                name: title,
+                type: file.type.split('/')[1].toUpperCase() || 'File',
+                uploadedBy: 'Admin',
+                date: new Date().toISOString().split('T')[0],
+            };
+            setDocuments([newDocument, ...documents]);
+            setTitle('');
+            setFile(null);
+            setOpen(false);
+        }
+    };
+
 
   return (
     <Card>
@@ -84,7 +105,7 @@ export default function DocumentsPage() {
                     <Label htmlFor="file" className="text-right">
                       File
                     </Label>
-                    <Input id="file" type="file" className="col-span-3" />
+                    <Input id="file" type="file" className="col-span-3" onChange={(e) => setFile(e.target.files?.[0] || null)} />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <Label htmlFor="title" className="text-right">
@@ -95,7 +116,7 @@ export default function DocumentsPage() {
                    <div className="grid grid-cols-4 items-center gap-4">
                         <div/>
                         <div className="col-span-3">
-                        <Button variant="outline" size="sm" onClick={handleGenerateTitle} disabled={isGenerating}>
+                        <Button variant="outline" size="sm" onClick={handleGenerateTitle} disabled={isGenerating || !file}>
                             {isGenerating ? (
                                 <>
                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -109,7 +130,7 @@ export default function DocumentsPage() {
                    </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit" onClick={() => setOpen(false)}>Upload</Button>
+                  <Button type="submit" onClick={handleUpload}>Upload</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
