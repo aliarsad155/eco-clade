@@ -22,7 +22,7 @@ export default function LoginPage() {
     setPassword('');
   };
 
-  const dashboardUrl = `/dashboard`;
+  const dashboardUrl = `/dashboard?role=${role}`;
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center p-4">
@@ -66,11 +66,11 @@ export default function LoginPage() {
             </div>
             <div className="grid gap-4">
                 <div className="grid gap-2">
-                    <Label htmlFor="email">{role === 'staff' ? 'Staff ID' : 'Email'}</Label>
+                    <Label htmlFor="email">Email</Label>
                     <Input
                         id="email"
-                        type={role === 'staff' ? 'text' : 'email'}
-                        placeholder={role === 'staff' ? 'your-staff-id' : 'name@example.com'}
+                        type='email'
+                        placeholder='name@example.com'
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}

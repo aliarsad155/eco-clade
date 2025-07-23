@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -28,7 +29,7 @@ const menuItems = [
   { href: '/announcements', label: 'Announcements', icon: Megaphone },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ isAdmin }: { isAdmin: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -56,8 +57,10 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href="#" legacyBehavior passHref>
-              <SidebarMenuButton tooltip={{ children: 'Settings', side: 'right' }}>
+            <Link href="/settings" legacyBehavior passHref>
+              <SidebarMenuButton 
+                isActive={pathname === '/settings'}
+                tooltip={{ children: 'Settings', side: 'right' }}>
                 <Settings />
                 <span>Settings</span>
               </SidebarMenuButton>
