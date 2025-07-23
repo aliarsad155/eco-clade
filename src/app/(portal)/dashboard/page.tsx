@@ -448,7 +448,7 @@ import {
     )
   }
 
-  export default function Dashboard() {
+export default function Dashboard() {
     const searchParams = useSearchParams();
     const [role, setRole] = React.useState<string | null>(null);
 

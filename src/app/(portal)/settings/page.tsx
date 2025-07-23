@@ -18,20 +18,12 @@ const themes = [
 
 export default function SettingsPage() {
     const [selectedTheme, setSelectedTheme] = React.useState('EcoClade');
-    const searchParams = useSearchParams();
     const [role, setRole] = React.useState<string | null>(null);
 
     React.useEffect(() => {
-        const urlRole = searchParams.get('role');
         const sessionRole = sessionStorage.getItem('userRole');
-
-        if (urlRole) {
-            sessionStorage.setItem('userRole', urlRole);
-            setRole(urlRole);
-        } else if (sessionRole) {
-            setRole(sessionRole);
-        }
-    }, [searchParams]);
+        setRole(sessionRole);
+    }, []);
 
     React.useEffect(() => {
         // Set default theme on mount
