@@ -17,7 +17,7 @@ export function Logo({ className }: { className?: string }) {
         <path d="M12 2a7 7 0 0 0-7 7c0 2 1 4 2 5" />
       </svg>
       <span className="text-2xl font-bold tracking-tighter">
-        <span style={{ color: 'hsl(var(--primary))' }}>Eco</span>
+        <span style={{ color: 'hsl(var(--accent))' }}>Eco</span>
         <span style={{ color: 'hsl(142.1 76.2% 36.3%)' }}>Clade</span>
       </span>
     </div>

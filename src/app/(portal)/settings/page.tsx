@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { useSearchParams } from 'next/navigation';
 
 const themes = [
     { name: 'Sunset', primary: '24 94% 52%', accent: '50 96% 62%', background: '20 40% 98%' },
@@ -16,7 +17,26 @@ const themes = [
 ];
 
 export default function SettingsPage() {
-    const [selectedTheme, setSelectedTheme] = React.useState('Sunset');
+    const [selectedTheme, setSelectedTheme] = React.useState('EcoClade');
+    const searchParams = useSearchParams();
+    const [role, setRole] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        const urlRole = searchParams.get('role');
+        if (urlRole) {
+            sessionStorage.setItem('userRole', urlRole);
+            setRole(urlRole);
+        } else {
+            setRole(sessionStorage.getItem('userRole'));
+        }
+    }, [searchParams]);
+
+    React.useEffect(() => {
+        // Set default theme on mount
+        handleThemeChange('EcoClade');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     const handleThemeChange = (themeName: string) => {
         const theme = themes.find(t => t.name === themeName);
@@ -29,17 +49,31 @@ export default function SettingsPage() {
 
             // sidebar colors derived from primary
             const [h, s, l] = theme.primary.split(' ').map(parseFloat);
-            root.style.setProperty('--sidebar-background', `${h} 20% 96%`);
+            root.style.setProperty('--sidebar-background', `${h} ${s * 0.4}% ${l + (100-l) * 0.9}%`);
             root.style.setProperty('--sidebar-foreground', `${h} 33% 15%`);
-            root.style.setProperty('--sidebar-primary', `${h} 33% 30%`);
+            root.style.setProperty('--sidebar-primary', `${h} ${s}% ${l}%`);
             root.style.setProperty('--sidebar-primary-foreground', `${h} 50% 95%`);
-            root.style.setProperty('--sidebar-accent', `${h} 20% 90%`);
+            root.style.setProperty('--sidebar-accent', `${h} ${s * 0.4}% ${l + (100-l) * 0.8}%`);
             root.style.setProperty('--sidebar-accent-foreground', `${h} 33% 15%`);
-            root.style.setProperty('--sidebar-border', `${h} 10% 88%`);
-            root.style.setProperty('--sidebar-ring', `${h} 33% 30%`);
+            root.style.setProperty('--sidebar-border', `${h} ${s * 0.2}% ${l + (100-l) * 0.75}%`);
+            root.style.setProperty('--sidebar-ring', `${h} ${s}% ${l}%`);
 
         }
     };
+
+    if (role !== 'admin') {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Access Denied</CardTitle>
+                    <CardDescription>You do not have permission to view this page.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <p>Only administrators can change theme settings.</p>
+                </CardContent>
+            </Card>
+        )
+    }
 
     return (
         <Card>
