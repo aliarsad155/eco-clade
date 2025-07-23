@@ -67,42 +67,42 @@ const statusVariant: { [key in Task['status']]: 'outline' | 'secondary' | 'defau
 };
 
 function TaskTable({ tasks }: { tasks: Task[] }) {
-    return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                <TableHead>Task</TableHead>
-                <TableHead className="hidden md:table-cell">Assignee</TableHead>
-                <TableHead className="hidden md:table-cell">Due Date</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Status</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {tasks.map((task) => (
-                <TableRow key={task.id}>
-                    <TableCell className="font-medium">{task.name}</TableCell>
-                    <TableCell className="hidden md:table-cell">
-                        <div className="flex items-center gap-2">
-                            <Avatar className="w-6 h-6">
-                                <AvatarImage src={`https://placehold.co/40x40`} data-ai-hint="person face" />
-                                <AvatarFallback>{task.assignee.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            {task.assignee}
-                        </div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">{task.due}</TableCell>
-                    <TableCell>
-                        <Badge variant={priorityVariant[task.priority]}>{task.priority}</Badge>
-                    </TableCell>
-                    <TableCell>
-                        <Badge variant={statusVariant[task.status]}>{task.status}</Badge>
-                    </TableCell>
-                </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    );
+  return (
+      <Table>
+          <TableHeader>
+              <TableRow>
+              <TableHead>Task</TableHead>
+              <TableHead className="hidden md:table-cell">Assignee</TableHead>
+              <TableHead className="hidden md:table-cell">Due Date</TableHead>
+              <TableHead>Priority</TableHead>
+              <TableHead>Status</TableHead>
+              </TableRow>
+          </TableHeader>
+          <TableBody>
+              {tasks.map((task) => (
+              <TableRow key={task.id}>
+                  <TableCell className="font-medium">{task.name}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                      <div className="flex items-center gap-2">
+                          <Avatar className="w-6 h-6">
+                              <AvatarImage src={`https://placehold.co/40x40`} data-ai-hint="person face" />
+                              <AvatarFallback>{task.assignee.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          {task.assignee}
+                      </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">{task.due}</TableCell>
+                  <TableCell>
+                      <Badge variant={priorityVariant[task.priority]}>{task.priority}</Badge>
+                  </TableCell>
+                  <TableCell>
+                      <Badge variant={statusVariant[task.status]}>{task.status}</Badge>
+                  </TableCell>
+              </TableRow>
+              ))}
+          </TableBody>
+      </Table>
+  );
 }
 
 export default function TasksPage() {
@@ -230,5 +230,3 @@ export default function TasksPage() {
         </Tabs>
     );
 }
-
-    
