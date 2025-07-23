@@ -26,14 +26,16 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center p-4">
-      <Image
-        src="https://placehold.co/1920x1080"
-        alt="Background"
-        fill
-        style={{objectFit: 'cover'}}
-        className="absolute inset-0 -z-10 brightness-[.25] dark:brightness-[0.2]"
-        data-ai-hint="eco-friendly architecture"
-      />
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="https://placehold.co/1920x1080"
+          alt="Background"
+          fill
+          style={{objectFit: 'cover'}}
+          className="brightness-[.25] dark:brightness-[0.2]"
+          data-ai-hint="eco-friendly architecture"
+        />
+      </div>
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
@@ -47,7 +49,7 @@ export default function LoginPage() {
         <CardContent>
           <div className="grid gap-6">
             <div className="grid gap-2">
-                <RadioGroup value={role} onValueChange={handleRoleChange} className="grid grid-cols-2 gap-4">
+                <RadioGroup defaultValue="staff" onValueChange={handleRoleChange} className="grid grid-cols-2 gap-4">
                     <Label
                         htmlFor="staff"
                         className={`flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground ${role === 'staff' ? 'border-primary' : ''}`}

@@ -7,16 +7,16 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 const themes = [
+    { name: 'Sunset', primary: '24 94% 52%', accent: '50 96% 62%', background: '20 40% 98%' },
     { name: 'EcoClade', primary: '142.1 76.2% 36.3%', accent: '47.9 95.8% 53.1%', background: '0 0% 100%' },
     { name: 'Forest', primary: '120 33% 30%', accent: '120 20% 65%', background: '120 10% 96%' },
     { name: 'Ocean', primary: '220 83% 59%', accent: '197 91% 64%', background: '210 40% 98%' },
-    { name: 'Sunset', primary: '24 94% 52%', accent: '50 96% 62%', background: '20 40% 98%' },
     { name: 'Minimalist', primary: '0 0% 15%', accent: '0 0% 50%', background: '0 0% 100%' },
     { name: 'Vibrant', primary: '330 89% 55%', accent: '270 90% 65%', background: '300 20% 98%' },
 ];
 
 export default function SettingsPage() {
-    const [selectedTheme, setSelectedTheme] = React.useState('EcoClade');
+    const [selectedTheme, setSelectedTheme] = React.useState('Sunset');
 
     const handleThemeChange = (themeName: string) => {
         const theme = themes.find(t => t.name === themeName);
