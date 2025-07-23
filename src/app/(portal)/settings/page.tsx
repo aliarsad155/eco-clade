@@ -23,11 +23,13 @@ export default function SettingsPage() {
 
     React.useEffect(() => {
         const urlRole = searchParams.get('role');
+        const sessionRole = sessionStorage.getItem('userRole');
+
         if (urlRole) {
             sessionStorage.setItem('userRole', urlRole);
             setRole(urlRole);
-        } else {
-            setRole(sessionStorage.getItem('userRole'));
+        } else if (sessionRole) {
+            setRole(sessionRole);
         }
     }, [searchParams]);
 
@@ -60,6 +62,19 @@ export default function SettingsPage() {
 
         }
     };
+
+    if (role === null) {
+        return (
+             <Card>
+                <CardHeader>
+                    <CardTitle>Loading...</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p>Please wait while we check your permissions.</p>
+                </CardContent>
+            </Card>
+        )
+    }
 
     if (role !== 'admin') {
         return (

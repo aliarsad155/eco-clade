@@ -13,20 +13,25 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
-  const role = searchParams.get('role');
-  const [isAdmin, setIsAdmin] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState<boolean | null>(null);
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-        const storedRole = sessionStorage.getItem('userRole');
-        if (role) {
-            sessionStorage.setItem('userRole', role);
-            setIsAdmin(role === 'admin');
-        } else if (storedRole) {
-            setIsAdmin(storedRole === 'admin');
-        }
+    const role = searchParams.get('role');
+    const storedRole = sessionStorage.getItem('userRole');
+
+    if (role) {
+        sessionStorage.setItem('userRole', role);
+        setIsAdmin(role === 'admin');
+    } else if (storedRole) {
+        setIsAdmin(storedRole === 'admin');
+    } else {
+        setIsAdmin(false);
     }
-  }, [role]);
+  }, [searchParams]);
+
+  if (isAdmin === null) {
+      return null;
+  }
 
   return (
     <SidebarProvider>

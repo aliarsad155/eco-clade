@@ -454,15 +454,17 @@ import {
 
     React.useEffect(() => {
         const urlRole = searchParams.get('role');
+        const sessionRole = sessionStorage.getItem('userRole');
+
         if (urlRole) {
             sessionStorage.setItem('userRole', urlRole);
             setRole(urlRole);
-        } else {
-            setRole(sessionStorage.getItem('userRole'));
+        } else if (sessionRole) {
+            setRole(sessionRole);
         }
     }, [searchParams]);
 
-    if (!role) {
+    if (role === null) {
         return <div>Loading...</div>;
     }
 
