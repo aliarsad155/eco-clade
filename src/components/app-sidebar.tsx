@@ -41,7 +41,7 @@ export function AppSidebar({ isAdmin }: { isAdmin: boolean }) {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} legacyBehavior passHref>
+              <Link href={item.href}>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
                   tooltip={{ children: item.label, side: 'right' }}
@@ -57,7 +57,7 @@ export function AppSidebar({ isAdmin }: { isAdmin: boolean }) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href="/settings" legacyBehavior passHref>
+            <Link href="/settings">
               <SidebarMenuButton 
                 isActive={pathname === '/settings'}
                 tooltip={{ children: 'Settings', side: 'right' }}>
