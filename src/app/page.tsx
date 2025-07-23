@@ -29,9 +29,9 @@ export default function LoginPage() {
       <Image
         src="https://placehold.co/1920x1080"
         alt="Background"
-        layout="fill"
-        objectFit="cover"
-        className="absolute inset-0 -z-10 object-cover brightness-[.25] dark:brightness-[0.2]"
+        fill
+        style={{objectFit: 'cover'}}
+        className="absolute inset-0 -z-10 brightness-[.25] dark:brightness-[0.2]"
         data-ai-hint="eco-friendly architecture"
       />
       <Card className="w-full max-w-md shadow-2xl">
@@ -53,7 +53,7 @@ export default function LoginPage() {
                         className={`flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground ${role === 'staff' ? 'border-primary' : ''}`}
                     >
                         <RadioGroupItem value="staff" id="staff" className="sr-only" />
-                        Staff Member
+                        Staff
                     </Label>
                     <Label
                         htmlFor="admin"
@@ -66,11 +66,11 @@ export default function LoginPage() {
             </div>
             <div className="grid gap-4">
                 <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{role === 'staff' ? 'Staff ID' : 'Email'}</Label>
                     <Input
                         id="email"
-                        type="email"
-                        placeholder="name@example.com"
+                        type={role === 'staff' ? 'text' : 'email'}
+                        placeholder={role === 'staff' ? 'your-staff-id' : 'name@example.com'}
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
