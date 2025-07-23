@@ -46,43 +46,45 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 
 const initialTasks = [
-    { id: 1, name: 'Finalize foundation blueprints', assignee: 'Michael J.', due: '2024-08-01', priority: 'High', status: 'In Progress' },
-    { id: 2, name: 'Conduct weekly safety inspection', assignee: 'Emily D.', due: '2024-07-29', priority: 'High', status: 'To Do' },
-    { id: 3, name: 'Order steel beams for Phase 2', assignee: 'John D.', due: '2024-08-05', priority: 'Medium', status: 'To Do' },
-    { id: 4, name: 'Client progress meeting', assignee: 'Jane S.', due: '2024-07-30', priority: 'Medium', status: 'In Progress' },
-    { id: 5, name: 'Approve subcontractor invoices', assignee: 'Admin', due: '2024-07-28', priority: 'Low', status: 'Completed' },
-    { id: 6, name: 'Update project timeline', assignee: 'John D.', due: '2024-08-02', priority: 'Medium', status: 'To Do' },
+    { id: 1, name: 'Finalize foundation blueprints', assignee: 'Michael J.', due: '2024-08-01', priority: 'High' as const, status: 'In Progress' as const },
+    { id: 2, name: 'Conduct weekly safety inspection', assignee: 'Emily D.', due: '2024-07-29', priority: 'High' as const, status: 'To Do' as const },
+    { id: 3, name: 'Order steel beams for Phase 2', assignee: 'John D.', due: '2024-08-05', priority: 'Medium' as const, status: 'To Do' as const },
+    { id: 4, name: 'Client progress meeting', assignee: 'Jane S.', due: '2024-07-30', priority: 'Medium' as const, status: 'In Progress' as const },
+    { id: 5, name: 'Approve subcontractor invoices', assignee: 'Admin', due: '2024-07-28', priority: 'Low' as const, status: 'Completed' as const },
+    { id: 6, name: 'Update project timeline', assignee: 'John D.', due: '2024-08-02', priority: 'Medium' as const, status: 'To Do' as const },
 ];
 
-const priorityVariant = {
+type Task = typeof initialTasks[number];
+
+const priorityVariant: { [key in Task['priority']]: 'destructive' | 'secondary' | 'outline' } = {
     High: 'destructive',
     Medium: 'secondary',
     Low: 'outline',
 };
 
-const statusVariant = {
+const statusVariant: { [key in Task['status']]: 'outline' | 'secondary' | 'default' } = {
     'To Do': 'outline',
     'In Progress': 'secondary',
     Completed: 'default',
 };
 
 export default function TasksPage() {
-    const [tasks, setTasks] = React.useState(initialTasks);
+    const [tasks, setTasks] = React.useState<Task[]>(initialTasks);
     const [open, setOpen] = React.useState(false);
     const [newTaskName, setNewTaskName] = React.useState('');
     const [newAssignee, setNewAssignee] = React.useState('');
     const [newDueDate, setNewDueDate] = React.useState('');
-    const [newPriority, setNewPriority] = React.useState('Medium');
+    const [newPriority, setNewPriority] = React.useState<Task['priority']>('Medium');
 
     const handleAddTask = () => {
         if (newTaskName && newAssignee && newDueDate) {
-            const newTask = {
+            const newTask: Task = {
                 id: tasks.length + 1,
                 name: newTaskName,
                 assignee: newAssignee,
                 due: newDueDate,
-                priority: newPriority as 'High' | 'Medium' | 'Low',
-                status: 'To Do' as 'To Do' | 'In Progress' | 'Completed',
+                priority: newPriority,
+                status: 'To Do',
             };
             setTasks([newTask, ...tasks]);
             setNewTaskName('');
@@ -130,7 +132,7 @@ export default function TasksPage() {
                         </div>
                         <div className="grid items-center gap-1.5">
                             <Label>Priority</Label>
-                            <Select value={newPriority} onValueChange={setNewPriority}>
+                            <Select value={newPriority} onValueChange={(value) => setNewPriority(value as Task['priority'])}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select priority" />
                             </SelectTrigger>
@@ -192,7 +194,7 @@ export default function TasksPage() {
     );
 }
 
-function TaskTable({ tasks }: { tasks: typeof initialTasks }) {
+function TaskTable({ tasks }: { tasks: Task[] }) {
     return (
         <Table>
             <TableHeader>
@@ -219,14 +221,14 @@ function TaskTable({ tasks }: { tasks: typeof initialTasks }) {
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{task.due}</TableCell>
                     <TableCell>
-                        <Badge variant={priorityVariant[task.priority as keyof typeof priorityVariant]}>{task.priority}</Badge>
+                        <Badge variant={priorityVariant[task.priority]}>{task.priority}</Badge>
                     </TableCell>
                     <TableCell>
-                        <Badge variant={statusVariant[task.status as keyof typeof statusVariant]}>{task.status}</Badge>
+                        <Badge variant={statusVariant[task.status]}>{task.status}</Badge>
                     </TableCell>
                 </TableRow>
                 ))}
             </TableBody>
         </Table>
-    )
+    );
 }
