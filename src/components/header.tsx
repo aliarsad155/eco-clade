@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CircleUser, Menu, Search, Package2 } from 'lucide-react';
+import { CircleUser, Menu, Search } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,13 +15,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { AppSidebar } from './app-sidebar';
 import { useSidebar } from './ui/sidebar';
+import { useRouter } from 'next/navigation';
 
 export function Header() {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
+  const router = useRouter();
   
   const getBreadcrumb = () => {
     const segments = pathname.split('/').filter(Boolean);
@@ -29,6 +29,11 @@ export function Header() {
     const lastSegment = segments[segments.length - 1];
     return lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
   };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('userRole');
+    router.push('/');
+  }
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
@@ -61,11 +66,13 @@ export function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/settings">Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-                <Link href="/">Logout</Link>
+            <DropdownMenuItem onClick={handleLogout}>
+                Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
