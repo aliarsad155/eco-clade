@@ -9,10 +9,10 @@ import { useSearchParams } from 'next/navigation';
 
 const themes = [
     { name: 'Sunset', primary: '24 94% 52%', accent: '50 96% 62%', background: '20 40% 98%' },
-    { name: 'EcoClade', primary: '142.1 76.2% 36.3%', accent: '47.9 95.8% 53.1%', background: '0 0% 100%' },
+    { name: 'EcoClade', primary: '142.1 76.2% 36.3%', accent: '47.9 95.8% 53.1%', background: '142.1 20% 96%' },
     { name: 'Forest', primary: '120 33% 30%', accent: '120 20% 65%', background: '120 10% 96%' },
     { name: 'Ocean', primary: '220 83% 59%', accent: '197 91% 64%', background: '210 40% 98%' },
-    { name: 'Minimalist', primary: '0 0% 15%', accent: '0 0% 50%', background: '0 0% 100%' },
+    { name: 'Minimalist', primary: '0 0% 15%', accent: '0 0% 50%', background: '0 0% 97%' },
     { name: 'Vibrant', primary: '330 89% 55%', accent: '270 90% 65%', background: '300 20% 98%' },
 ];
 
@@ -26,8 +26,8 @@ export default function SettingsPage() {
     }, []);
 
     React.useEffect(() => {
-        // Set default theme on mount
-        handleThemeChange('EcoClade');
+        const sessionTheme = sessionStorage.getItem('selectedTheme') || 'EcoClade';
+        handleThemeChange(sessionTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -36,21 +36,22 @@ export default function SettingsPage() {
         const theme = themes.find(t => t.name === themeName);
         if (theme) {
             setSelectedTheme(theme.name);
+            sessionStorage.setItem('selectedTheme', theme.name);
             const root = document.documentElement;
-            root.style.setProperty('--primary', theme.primary);
-            root.style.setProperty('--accent', theme.accent);
-            root.style.setProperty('--background', theme.background);
+            root.style.setProperty('--background', `hsl(${theme.background})`);
+            root.style.setProperty('--primary', `hsl(${theme.primary})`);
+            root.style.setProperty('--accent', `hsl(${theme.accent})`);
 
             // sidebar colors derived from primary
-            const [h, s, l] = theme.primary.split(' ').map(parseFloat);
-            root.style.setProperty('--sidebar-background', `${h} ${s * 0.4}% ${l + (100-l) * 0.9}%`);
-            root.style.setProperty('--sidebar-foreground', `${h} 33% 15%`);
-            root.style.setProperty('--sidebar-primary', `${h} ${s}% ${l}%`);
-            root.style.setProperty('--sidebar-primary-foreground', `${h} 50% 95%`);
-            root.style.setProperty('--sidebar-accent', `${h} ${s * 0.4}% ${l + (100-l) * 0.8}%`);
-            root.style.setProperty('--sidebar-accent-foreground', `${h} 33% 15%`);
-            root.style.setProperty('--sidebar-border', `${h} ${s * 0.2}% ${l + (100-l) * 0.75}%`);
-            root.style.setProperty('--sidebar-ring', `${h} ${s}% ${l}%`);
+            const [h, s, l] = theme.primary.split(' ').map(val => parseFloat(val.replace('%','')));
+            root.style.setProperty('--sidebar-background', `hsl(${h} ${s * 0.4} ${l + (100-l) * 0.9})`);
+            root.style.setProperty('--sidebar-foreground', `hsl(${h} 33% 15%)`);
+            root.style.setProperty('--sidebar-primary', `hsl(${h} ${s}% ${l}%)`);
+            root.style.setProperty('--sidebar-primary-foreground', `hsl(${h} 50% 95%)`);
+            root.style.setProperty('--sidebar-accent', `hsl(${h} ${s * 0.4} ${l + (100-l) * 0.8})`);
+            root.style.setProperty('--sidebar-accent-foreground', `hsl(${h} 33% 15%)`);
+            root.style.setProperty('--sidebar-border', `hsl(${h} ${s * 0.2} ${l + (100-l) * 0.75})`);
+            root.style.setProperty('--sidebar-ring', `hsl(${h} ${s}% ${l}%)`);
 
         }
     };
