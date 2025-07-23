@@ -81,8 +81,8 @@ export default function TasksPage() {
                 name: newTaskName,
                 assignee: newAssignee,
                 due: newDueDate,
-                priority: newPriority,
-                status: 'To Do',
+                priority: newPriority as 'High' | 'Medium' | 'Low',
+                status: 'To Do' as 'To Do' | 'In Progress' | 'Completed',
             };
             setTasks([newTask, ...tasks]);
             setNewTaskName('');
@@ -93,103 +93,103 @@ export default function TasksPage() {
         }
     };
 
-  return (
-    <Tabs defaultValue="all">
-      <div className="flex items-center">
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="my-tasks">My Tasks</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-        </TabsList>
-        <div className="ml-auto flex items-center gap-2">
-           <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm" className="h-8 gap-1">
-                    <PlusCircle className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    New Task
-                    </span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create New Task</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid items-center gap-1.5">
-                    <Label htmlFor="taskName">Task Name</Label>
-                    <Input id="taskName" value={newTaskName} onChange={e => setNewTaskName(e.target.value)} />
-                  </div>
-                  <div className="grid items-center gap-1.5">
-                    <Label htmlFor="assignee">Assignee</Label>
-                    <Input id="assignee" value={newAssignee} onChange={e => setNewAssignee(e.target.value)} />
-                  </div>
-                  <div className="grid items-center gap-1.5">
-                    <Label htmlFor="dueDate">Due Date</Label>
-                    <Input id="dueDate" type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} />
-                  </div>
-                  <div className="grid items-center gap-1.5">
-                    <Label>Priority</Label>
-                    <Select value={newPriority} onValueChange={setNewPriority}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="High">High</SelectItem>
-                        <SelectItem value="Medium">Medium</SelectItem>
-                        <SelectItem value="Low">Low</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+    return (
+        <Tabs defaultValue="all">
+            <div className="flex items-center">
+                <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="my-tasks">My Tasks</TabsTrigger>
+                <TabsTrigger value="completed">Completed</TabsTrigger>
+                </TabsList>
+                <div className="ml-auto flex items-center gap-2">
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger asChild>
+                        <Button size="sm" className="h-8 gap-1">
+                            <PlusCircle className="h-3.5 w-3.5" />
+                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                            New Task
+                            </span>
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                        <DialogTitle>Create New Task</DialogTitle>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                        <div className="grid items-center gap-1.5">
+                            <Label htmlFor="taskName">Task Name</Label>
+                            <Input id="taskName" value={newTaskName} onChange={e => setNewTaskName(e.target.value)} />
+                        </div>
+                        <div className="grid items-center gap-1.5">
+                            <Label htmlFor="assignee">Assignee</Label>
+                            <Input id="assignee" value={newAssignee} onChange={e => setNewAssignee(e.target.value)} />
+                        </div>
+                        <div className="grid items-center gap-1.5">
+                            <Label htmlFor="dueDate">Due Date</Label>
+                            <Input id="dueDate" type="date" value={newDueDate} onChange={e => setNewDueDate(e.target.value)} />
+                        </div>
+                        <div className="grid items-center gap-1.5">
+                            <Label>Priority</Label>
+                            <Select value={newPriority} onValueChange={setNewPriority}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select priority" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="High">High</SelectItem>
+                                <SelectItem value="Medium">Medium</SelectItem>
+                                <SelectItem value="Low">Low</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+                        </div>
+                        <DialogFooter>
+                        <Button onClick={handleAddTask}>Add Task</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                    </Dialog>
                 </div>
-                <DialogFooter>
-                  <Button onClick={handleAddTask}>Add Task</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-        </div>
-      </div>
-      <TabsContent value="all">
-        <Card>
-          <CardHeader>
-            <CardTitle>All Tasks</CardTitle>
-            <CardDescription>
-              An overview of all tasks across projects.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TaskTable tasks={tasks} />
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="my-tasks">
-        <Card>
-          <CardHeader>
-            <CardTitle>My Tasks</CardTitle>
-            <CardDescription>
-              Tasks assigned directly to you.
-            </CardDescription>
-          </Header>
-          <CardContent>
-            <TaskTable tasks={tasks.filter(t => ['John D.', 'Jane S.', 'Emily D.'].includes(t.assignee))} />
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="completed">
-         <Card>
-          <CardHeader>
-            <CardTitle>Completed Tasks</CardTitle>
-            <CardDescription>
-              Recently completed tasks.
-            </CardDescription>
-          </Header>
-          <CardContent>
-            <TaskTable tasks={tasks.filter(t => t.status === 'Completed')} />
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
-  );
+            </div>
+            <TabsContent value="all">
+                <Card>
+                <CardHeader>
+                    <CardTitle>All Tasks</CardTitle>
+                    <CardDescription>
+                    An overview of all tasks across projects.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <TaskTable tasks={tasks} />
+                </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="my-tasks">
+                <Card>
+                <CardHeader>
+                    <CardTitle>My Tasks</CardTitle>
+                    <CardDescription>
+                    Tasks assigned directly to you.
+                    </CardDescription>
+                </Header>
+                <CardContent>
+                    <TaskTable tasks={tasks.filter(t => ['John D.', 'Jane S.', 'Emily D.'].includes(t.assignee))} />
+                </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="completed">
+                <Card>
+                <CardHeader>
+                    <CardTitle>Completed Tasks</CardTitle>
+                    <CardDescription>
+                    Recently completed tasks.
+                    </CardDescription>
+                </Header>
+                <CardContent>
+                    <TaskTable tasks={tasks.filter(t => t.status === 'Completed')} />
+                </CardContent>
+                </Card>
+            </TabsContent>
+        </Tabs>
+    );
 }
 
 function TaskTable({ tasks }: { tasks: typeof initialTasks }) {
